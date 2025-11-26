@@ -1,0 +1,121 @@
+No files changed, compilation skipped
+
+Ran 1 test for test/ReentrancyExploit.t.sol:ReentrancyExploit
+[FAIL: ETH_TRANSFER_FAIL] testReentrancyToDrain() (gas: 116669)
+Logs:
+  maxDeposit 1000000000000000000
+  prev.amount 0
+  block.number 1
+  prev.depositedAtBlock 0
+  Before add prev.amount 0
+  Final prev.amount 1000000000000000000
+  maxDeposit 1000000000000000000
+  prev.amount 1000000000000000000
+  block.number 2
+  prev.depositedAtBlock 1
+  Before add prev.amount 1000000000000000000
+  Final prev.amount 2000000000000000000
+  maxDeposit 1000000000000000000
+  prev.amount 2000000000000000000
+  block.number 3
+  prev.depositedAtBlock 2
+  Before add prev.amount 2000000000000000000
+  Final prev.amount 3000000000000000000
+
+Traces:
+  [1022453] ReentrancyExploit::setUp()
+    ├─ [427513] → new BlockDepositVault@0x5615dEB798BB3E4dFa0139dFa1b3D433Cc23b72f
+    │   └─ ← [Return] 2135 bytes of code
+    ├─ [488309] → new Attacker@0x2e234DAe75C793f67A35089C9d99245E1C58470b
+    │   └─ ← [Return] 2216 bytes of code
+    ├─ [0] VM::deal(ECRecover: [0x0000000000000000000000000000000000000001], 10000000000000000000 [1e19])
+    │   └─ ← [Return]
+    ├─ [0] VM::prank(ECRecover: [0x0000000000000000000000000000000000000001])
+    │   └─ ← [Return]
+    ├─ [202] BlockDepositVault::receive{value: 5000000000000000000}()
+    │   └─ ← [Revert] TOO_MUCH_ETH
+    └─ ← [Stop]
+
+  [116669] ReentrancyExploit::testReentrancyToDrain()
+    ├─ [0] VM::deal(Attacker: [0x2e234DAe75C793f67A35089C9d99245E1C58470b], 10000000000000000000 [1e19])
+    │   └─ ← [Return]
+    ├─ [0] VM::roll(1)
+    │   └─ ← [Return]
+    ├─ [64676] Attacker::deposit(1000000000000000000 [1e18])
+    │   ├─ [52507] BlockDepositVault::receive{value: 1000000000000000000}()
+    │   │   ├─ [0] console::log("maxDeposit", 1000000000000000000 [1e18]) [staticcall]
+    │   │   │   └─ ← [Stop]
+    │   │   ├─ [0] console::log("prev.amount", 0) [staticcall]
+    │   │   │   └─ ← [Stop]
+    │   │   ├─ [0] console::log("block.number", 1) [staticcall]
+    │   │   │   └─ ← [Stop]
+    │   │   ├─ [0] console::log("prev.depositedAtBlock", 0) [staticcall]
+    │   │   │   └─ ← [Stop]
+    │   │   ├─ [0] console::log("Before add prev.amount", 0) [staticcall]
+    │   │   │   └─ ← [Stop]
+    │   │   ├─ [0] console::log("Final prev.amount", 1000000000000000000 [1e18]) [staticcall]
+    │   │   │   └─ ← [Stop]
+    │   │   └─ ← [Stop]
+    │   └─ ← [Stop]
+    ├─ [0] VM::roll(2)
+    │   └─ ← [Return]
+    ├─ [13876] Attacker::deposit(1000000000000000000 [1e18])
+    │   ├─ [6207] BlockDepositVault::receive{value: 1000000000000000000}()
+    │   │   ├─ [0] console::log("maxDeposit", 1000000000000000000 [1e18]) [staticcall]
+    │   │   │   └─ ← [Stop]
+    │   │   ├─ [0] console::log("prev.amount", 1000000000000000000 [1e18]) [staticcall]
+    │   │   │   └─ ← [Stop]
+    │   │   ├─ [0] console::log("block.number", 2) [staticcall]
+    │   │   │   └─ ← [Stop]
+    │   │   ├─ [0] console::log("prev.depositedAtBlock", 1) [staticcall]
+    │   │   │   └─ ← [Stop]
+    │   │   ├─ [0] console::log("Before add prev.amount", 1000000000000000000 [1e18]) [staticcall]
+    │   │   │   └─ ← [Stop]
+    │   │   ├─ [0] console::log("Final prev.amount", 2000000000000000000 [2e18]) [staticcall]
+    │   │   │   └─ ← [Stop]
+    │   │   └─ ← [Stop]
+    │   └─ ← [Stop]
+    ├─ [0] VM::roll(3)
+    │   └─ ← [Return]
+    ├─ [29103] Attacker::attack()
+    │   ├─ [6207] BlockDepositVault::receive{value: 1000000000000000000}()
+    │   │   ├─ [0] console::log("maxDeposit", 1000000000000000000 [1e18]) [staticcall]
+    │   │   │   └─ ← [Stop]
+    │   │   ├─ [0] console::log("prev.amount", 2000000000000000000 [2e18]) [staticcall]
+    │   │   │   └─ ← [Stop]
+    │   │   ├─ [0] console::log("block.number", 3) [staticcall]
+    │   │   │   └─ ← [Stop]
+    │   │   ├─ [0] console::log("prev.depositedAtBlock", 2) [staticcall]
+    │   │   │   └─ ← [Stop]
+    │   │   ├─ [0] console::log("Before add prev.amount", 2000000000000000000 [2e18]) [staticcall]
+    │   │   │   └─ ← [Stop]
+    │   │   ├─ [0] console::log("Final prev.amount", 3000000000000000000 [3e18]) [staticcall]
+    │   │   │   └─ ← [Stop]
+    │   │   └─ ← [Stop]
+    │   ├─ [14667] BlockDepositVault::withdraw(3000000000000000000 [3e18])
+    │   │   ├─ [6850] Attacker::receive{value: 3000000000000000000}()
+    │   │   │   ├─ [549] BlockDepositVault::withdraw(2000000000000000000 [2e18])
+    │   │   │   │   └─ ← [Revert] NOT_ENOUGH_ETH
+    │   │   │   └─ ← [Revert] NOT_ENOUGH_ETH
+    │   │   └─ ← [Revert] ETH_TRANSFER_FAIL
+    │   └─ ← [Revert] ETH_TRANSFER_FAIL
+    └─ ← [Revert] ETH_TRANSFER_FAIL
+
+Backtrace:
+  at BlockDepositVault.withdraw
+  at Attacker.receive
+  at BlockDepositVault.withdraw
+  at Attacker.attack
+  at ReentrancyExploit.testReentrancyToDrain
+
+Suite result: FAILED. 0 passed; 1 failed; 0 skipped; finished in 678.97µs (275.77µs CPU time)
+
+Ran 1 test suite in 7.19ms (678.97µs CPU time): 0 tests passed, 1 failed, 0 skipped (1 total tests)
+
+Failing tests:
+Encountered 1 failing test in test/ReentrancyExploit.t.sol:ReentrancyExploit
+[FAIL: ETH_TRANSFER_FAIL] testReentrancyToDrain() (gas: 116669)
+
+Encountered a total of 1 failing tests, 0 tests succeeded
+
+Tip: Run `forge test --rerun` to retry only the 1 failed test
